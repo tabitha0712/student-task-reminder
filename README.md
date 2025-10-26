@@ -67,7 +67,3 @@ Proyek ini dilisensikan di bawah **MIT License**
 
 
 
-
-## Lisensi
-Proyek ini dilisensikan di bawah **MIT License**  
-© 2025 Tabitha Salsabilla Az Zahra
