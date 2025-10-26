@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>CLARITY — Student Task Reminder</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<header class="navbar">
+		<div class="brand">
+			<h1>CLARITY</h1>
+			<p class="tagline">Organize your day with clarity</p>
+		</div>
+		<div class="nav-actions">
+			<input id="searchInput" type="search" placeholder="Search tasks..." aria-label="Search tasks">
+			<button id="exportBtn" class="btn small">Export .txt</button>
+			<button id="toggleThemeBtn" class="btn small">🌙</button>
+		</div>
+	</header>
+
+	<main class="main-container">
+		<section class="add-section card">
+			<div class="add-left">
+				<input id="taskInput" type="text" placeholder="What do you want to do?" aria-label="Task title">
+			</div>
+			<div class="add-right">
+				<input id="deadlineInput" type="date" aria-label="Deadline">
+				<select id="prioritySelect" aria-label="Priority">
+					<option value="low">Low</option>
+					<option value="medium" selected>Medium</option>
+					<option value="high">High</option>
+				</select>
+				<button id="addTaskBtn" class="btn primary">Add</button>
+			</div>
+		</section>
+
+		<section class="controls">
+			<div class="filters">
+				<button class="filter-btn active" data-filter="all">All</button>
+				<button class="filter-btn" data-filter="pending">Pending</button>
+				<button class="filter-btn" data-filter="completed">Completed</button>
+			</div>
+			<div class="sorts">
+				<label for="sortSelect">Sort:</label>
+				<select id="sortSelect">
+					<option value="created">Newest</option>
+					<option value="deadline">By Deadline</option>
+					<option value="priority">By Priority</option>
+				</select>
+			</div>
+		</section>
+
+		<section id="taskList" class="cards-grid" aria-live="polite">
+			<!-- Task cards injected here -->
+		</section>
+
+		<footer class="footer">
+			<p>CLARITY • Student Task Reminder — Built by Tabitha S. Az Zahra</p>
+		</footer>
+	</main>
+
+	<template id="taskTemplate">
+		<article class="task-card">
+		<div class="task-left">
+		<button class="chcek-btn" title="Mark complete"></button>
+		<div class="task-meta">
+			<h3 class="task title"></h3>
+			<p class="task-info"></p>
+		</div>
+	</div>
+	<div class="task-right">
+		<div class="task-actions">
+			<button class="star-btn" title="Toggle important">★</button>
+			<button class="edit-btn" title="Edit task">✎</button>
+			<button class="delete-btn" title="Delete task">🚮</button>
+		</div>
+	</div>
+</article>
+</template>
+
+<script src="script.js" defer></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
