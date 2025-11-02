@@ -1,6 +1,6 @@
 # Student Task Reminder
 
-Student Task Reminder adalah aplikasi web sederhana untuk membantu pelajar mencatat tugas sekolah dan mengelola daftar tugas secara praktis. Aplikasi ini dirancang agar siswa dapat lebih disiplin, terorganisir, dan tidak melewatkan tenggat waktu tugas sekolah.
+Student Task Reminder adalah aplikasi web sederhana untuk membantu pelajar mencatat dan mengingat tugas sekolah. Website ini dirancang untuk pengingat tugas harian siswa agar siswa dapat lebih disiplin dan tidak melewatkan tenggat waktu tugas sekolah.
 
 
 ## Fitur
@@ -11,7 +11,7 @@ Student Task Reminder adalah aplikasi web sederhana untuk membantu pelajar menca
 - Filter tugas (semua/sudah selesai/belum selesai)
 - Mode gelap (Dark Mode)
 - Export daftar tugas ke file `.txt`
-- Data tersimpan otomatis di browser (LocalStorage)
+- Notifikasi pengingat H-1 sebelum deadline
 
 
 ## Teknologi yang Digunakan
@@ -31,15 +31,9 @@ Student Task Reminder adalah aplikasi web sederhana untuk membantu pelajar menca
 
 
 ## Tujuan Proyek
-- Membantu pelajar mengatur daftar tugas sekolah dengan lebih rapi.
+- Mengingat tugas yang harus dikerjakan.
 - Membiasakan kedisiplinan dan manajemen waktu.
-- Menyediakan aplikasi sederhana yang bermanfaat dan mudah digunakan.
-
-
-## Manfaat
-- Mengurangi kebiasaan lupa tugas.
-- Membantu fokus belajar sesuai prioritas.
-- Semua catatan tugas tersimpan dan aman.
+- Menyediakan website sederhana yang bermanfaat dan mudah digunakan.
 
 
 ## Pembuat
