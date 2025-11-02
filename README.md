@@ -1,6 +1,24 @@
-# Student Task Reminder
+# **Student Task Reminder — Clarity**
 
-Student Task Reminder adalah aplikasi web sederhana untuk membantu pelajar mencatat dan mengingat tugas sekolah. Website ini dirancang untuk pengingat tugas harian siswa agar siswa dapat lebih disiplin dan tidak melewatkan tenggat waktu tugas sekolah.
+## Latar Belakang
+Banyak pelajar sering lupa jadwal atau tugas sekolah karena terlalu banyak hal yang harus diingat setiap harinya. Akibatnya, beberapa tugas jadi tertunda atau bahkan tidak dikerjakan sama sekali.
+Melihat hal itu, dibuatlah Student Task Reminder (Clarity),yaitu sebuah pengingat tugas sederhana yang membantu siswa mencatat dan mengatur tugasnya secara lebih teratur.
+
+
+## Pengertian
+Student Task Reminder adalah website pengingat tugas sekolah sederhana yang dapat digunakan oleh pelajar untuk mencatat daftar tugas, menandai tugas penting, dan menandai tugas yang sudah selesai.
+
+
+## Tujuan 
+- Membantu siswa dalam menngatur dan mengingat tugas sekolah agar tidak terlewat.
+- Menumbuhkan keabiasaan disiplin dan melatih ampuan manajemen waktu melalui pencatatan tugas yang teratur.
+- Menyediakan pengingat tugas yang sederhana, praktis, dan mudah digunakan oleh pelajar.
+
+
+## Manfaat
+- Siswa menjadi lebih teratur dalam menyelesaikan tugas sesuai prioritas.
+- Mengurangi risiko lupa atau keterlambatan dalam pengumpulan tugas.
+- Membantu menciptakan kebiasaan belajar yang lebih efektif dan terencana.
 
 
 ## Fitur
@@ -17,7 +35,7 @@ Student Task Reminder adalah aplikasi web sederhana untuk membantu pelajar menca
 ## Teknologi yang Digunakan
 - HTML
 - CSS
-- JavaScript (DOM & LocalStorage)
+- JavaScript
 
 
 ## Cara Menggunakan
@@ -28,12 +46,6 @@ Student Task Reminder adalah aplikasi web sederhana untuk membantu pelajar menca
 5. Gunakan kolom **Search** untuk mencari tugas.
 6. Klik tombol **Export .txt** untuk menyimpan daftar tugas.
 7. Klik tombol **Toggle Theme** untuk mengubah tema gelap/terang.
-
-
-## Tujuan Proyek
-- Mengingat tugas yang harus dikerjakan.
-- Membiasakan kedisiplinan dan manajemen waktu.
-- Menyediakan website sederhana yang bermanfaat dan mudah digunakan.
 
 
 ## Pembuat
