@@ -1,61 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLARITY</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Task Manager — CLARITY</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- ---------- Navbar ---------- -->
+  <!-- Navbar -->
   <nav class="navbar">
     <div class="brand">
       <h1>CLARITY</h1>
       <p class="tagline">Organize your day with clarity</p>
     </div>
+
     <div class="nav-actions">
-      <input type="search" id="searchInput" placeholder="Search tasks...">
-      <button id="darkModeToggle" class="btn">🌓</button>
-      <button id="exportBtn" class="btn primary">Export</button>
+      <input type="search" id="searchInput" placeholder="Search tasks..." aria-label="Search tasks" />
+      <button id="darkModeToggle" class="btn" title="Toggle dark mode">🌓</button>
+      <button id="exportBtn" class="btn primary" title="Export tasks">Export</button>
     </div>
   </nav>
 
-  <!-- ---------- Main Container ---------- -->
-  <div class="main-container">
-    <!-- Add Section -->
-    <div class="add-section">
+  <!-- Main -->
+  <main class="main-container">
+    <section class="add-section">
       <div class="add-left">
-        <input type="text" id="taskInput" placeholder="What do you want to do?">
+        <input type="text" id="taskInput" placeholder="What do you want to do?" aria-label="Task input" />
       </div>
       <div class="add-right">
-        <input type="date" id="deadlineInput">
-        <select id="prioritySelect">
+        <input type="date" id="deadlineInput" aria-label="Deadline" />
+        <select id="prioritySelect" aria-label="Priority">
           <option value="low">Low</option>
           <option value="high">High</option>
         </select>
         <button id="addBtn" class="btn primary">Add</button>
       </div>
-    </div>
+    </section>
 
-    <!-- Filters -->
-    <div class="controls">
+    <section class="controls">
       <div class="filters">
-        <button class="filter-btn active" value="all" onclick="filterSelect.value='all';renderTasks()">All</button>
-        <button class="filter-btn" value="completed" onclick="filterSelect.value='completed';renderTasks()">Completed</button>
-        <button class="filter-btn" value="pending" onclick="filterSelect.value='pending';renderTasks()">Pending</button>
+        <button class="filter-btn active" data-value="all">All</button>
+        <button class="filter-btn" data-value="completed">Completed</button>
+        <button class="filter-btn" data-value="pending">Pending</button>
       </div>
-    </div>
+      <div class="controls-right">
+        <span class="count" id="taskCount">0 tasks</span>
+      </div>
+    </section>
 
-    <!-- Task List -->
-    <div class="cards-grid" id="taskList"></div>
-  </div>
+    <!-- Tasks grid -->
+    <section class="cards-grid" id="taskList"></section>
+  </main>
 
   <!-- Footer -->
   <footer class="footer">
     <p class="creator">Created by <strong>zahraflow</strong></p>
   </footer>
 
-  <!-- JS -->
+  <!-- Reminder Modal -->
+  <div id="reminderModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-inner">
+      <h3>Reminder</h3>
+      <p id="reminderText">You have tasks due soon.</p>
+      <div class="modal-actions">
+        <button id="closeReminder" class="btn">OK</button>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
