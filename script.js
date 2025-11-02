@@ -1,228 +1,189 @@
-document.addEventListener('DOMContentLoaded', () => {
-  // DOM
-  const taskInput = document.getElementById('taskInput');
-  const addBtn = document.getElementById('addBtn');
-  const deadlineInput = document.getElementById('deadlineInput');
-  const prioritySelect = document.getElementById('prioritySelect');
-  const taskList = document.getElementById('taskList');
-  const searchInput = document.getElementById('searchInput');
-  const filterBtns = document.querySelectorAll('.filter-btn');
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  const exportBtn = document.getElementById('exportBtn');
-  const taskCount = document.getElementById('taskCount');
-  const reminderModal = document.getElementById('reminderModal');
-  const reminderText = document.getElementById('reminderText');
-  const closeReminder = document.getElementById('closeReminder');
+document.addEventListener("DOMContentLoaded", function() {
 
-  // Data
-  let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-  let currentFilter = 'all';
+  // ---------- Elemen ----------
+  const taskInput = document.getElementById("taskInput");
+  const addBtn = document.getElementById("addBtn");
+  const deadlineInput = document.getElementById("deadlineInput");
+  const prioritySelect = document.getElementById("prioritySelect");
+  const taskList = document.getElementById("taskList");
+  const searchInput = document.getElementById("searchInput");
+  const filterSelect = { value: "all" };
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  const exportBtn = document.getElementById("exportBtn");
 
-  // helpers
-  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,6);
-  const save = () => localStorage.setItem('tasks', JSON.stringify(tasks));
+  // ---------- Data ----------
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  // render
+  // ---------- Render ----------
   function renderTasks() {
-    taskList.innerHTML = '';
-    const q = (searchInput.value || '').toLowerCase();
+    taskList.innerHTML = "";
+    let filtered = tasks;
 
-    const filtered = tasks.filter(t => {
-      if (currentFilter === 'completed' && !t.completed) return false;
-      if (currentFilter === 'pending' && t.completed) return false;
-      if (q && !t.text.toLowerCase().includes(q)) return false;
-      return true;
-    });
+    // Filter
+    if (filterSelect.value === "completed") {
+      filtered = tasks.filter(t => t.completed);
+    } else if (filterSelect.value === "pending") {
+      filtered = tasks.filter(t => !t.completed);
+    }
 
-    taskCount.textContent = `${tasks.length} task${tasks.length !== 1 ? 's' : ''}`;
+    // Search
+    const query = searchInput.value.toLowerCase();
+    filtered = filtered.filter(t => t.text.toLowerCase().includes(query));
 
-    filtered.forEach(t => {
-      const card = document.createElement('div');
-      card.className = 'task-card' + (t.completed ? ' completed' : '');
-      card.dataset.id = t.id;
+    // Render each task
+    filtered.forEach((task, index) => {
+      const card = document.createElement("div");
+      card.className = "task-card" + (task.completed ? " completed" : "");
 
-      const top = document.createElement('div');
-      top.className = 'task-top';
+      const left = document.createElement("div");
+      left.className = "task-left";
 
-      const left = document.createElement('div');
-      left.className = 'task-left';
-
-      const check = document.createElement('button');
-      check.className = 'check-btn' + (t.completed ? ' completed' : '');
-      check.title = t.completed ? 'Mark as pending' : 'Mark as completed';
-      const checkSpan = document.createElement('span');
-      checkSpan.textContent = '✓';
-      check.appendChild(checkSpan);
-
-      const meta = document.createElement('div');
-      const title = document.createElement('p');
-      title.className = 'task-title';
-      title.textContent = t.text;
-      title.title = 'Click to edit';
-
-      title.addEventListener('click', () => {
-        const newText = prompt('Edit task text:', t.text);
-        if (newText !== null) {
-          t.text = newText.trim() || t.text;
-          save(); renderTasks();
-        }
+      const checkBtn = document.createElement("button");
+      checkBtn.className = "check-btn" + (task.completed ? " completed" : "");
+      checkBtn.textContent = "✓";
+      checkBtn.addEventListener("click", () => {
+        task.completed = !task.completed;
+        saveTasks();
+        renderTasks();
       });
 
-      const info = document.createElement('p');
-      info.className = 'task-info';
-      info.textContent = t.deadline ? `Deadline: ${t.deadline}` : '';
-      const badge = document.createElement('span');
-      badge.className = 'badge ' + (t.priority === 'high' ? 'high' : 'low');
-      badge.textContent = t.priority === 'high' ? 'High' : 'Low';
-      info.appendChild(badge);
+      const titleEl = document.createElement("div");
+      titleEl.className = "task-title";
+      titleEl.textContent = task.text;
 
-      meta.appendChild(title);
-      meta.appendChild(info);
+      const infoEl = document.createElement("div");
+      infoEl.className = "task-info";
+      infoEl.textContent = task.deadline ? `Deadline: ${task.deadline}` : "";
 
-      left.appendChild(check);
-      left.appendChild(meta);
+      const badge = document.createElement("span");
+      badge.className = "badge " + task.priority;
+      badge.textContent = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
 
-      const right = document.createElement('div');
-      right.className = 'task-actions';
+      infoEl.appendChild(badge);
+      left.appendChild(checkBtn);
+      left.appendChild(titleEl);
+      left.appendChild(infoEl);
 
-      const star = document.createElement('button');
-      star.className = 'star-btn' + (t.priority === 'high' ? ' important' : '');
-      star.textContent = '★';
-      star.title = t.priority === 'high' ? 'Unset priority' : 'Set as high priority';
+      const right = document.createElement("div");
+      right.className = "task-actions";
 
-      const editBtn = document.createElement('button');
-      editBtn.className = 'edit-btn';
-      editBtn.textContent = '✎';
-      editBtn.title = 'Edit task';
+      const starBtn = document.createElement("button");
+      starBtn.className = "star-btn" + (task.priority === "high" ? " important" : "");
+      starBtn.textContent = "★";
+      starBtn.addEventListener("click", () => {
+        task.priority = task.priority === "high" ? "low" : "high";
+        saveTasks();
+        renderTasks();
+      });
 
-      const del = document.createElement('button');
-      del.className = 'delete-btn';
-      del.textContent = '🚮';
-      del.title = 'Delete task';
+      const deleteBtn = document.createElement("button");
+      deleteBtn.className = "delete-btn";
+      deleteBtn.textContent = "🚮";
+      deleteBtn.addEventListener("click", () => {
+        tasks.splice(index, 1);
+        saveTasks();
+        renderTasks();
+      });
 
-      right.appendChild(star);
-      right.appendChild(editBtn);
-      right.appendChild(del);
+      right.appendChild(starBtn);
+      right.appendChild(deleteBtn);
 
-      top.appendChild(left);
-      top.appendChild(right);
-      card.appendChild(top);
+      card.appendChild(left);
+      card.appendChild(right);
 
       taskList.appendChild(card);
-
-      // events
-      check.addEventListener('click', () => {
-        t.completed = !t.completed; save(); renderTasks();
-      });
-      star.addEventListener('click', () => { t.priority = t.priority === 'high' ? 'low' : 'high'; save(); renderTasks(); });
-      editBtn.addEventListener('click', () => {
-        const newText = prompt('Edit task text:', t.text);
-        if (newText !== null) { t.text = newText.trim() || t.text; save(); renderTasks(); }
-      });
-      del.addEventListener('click', () => { tasks = tasks.filter(x=>x.id!==t.id); save(); renderTasks(); });
-
     });
   }
 
-  // add
-  addBtn.addEventListener('click', () => {
-    const text = (taskInput.value || '').trim();
-    if (!text) return;
-    const newTask = {
-      id: uid(),
-      text,
-      deadline: deadlineInput.value || '',
-      priority: prioritySelect.value || 'low',
-      completed: false
-    };
-    tasks.unshift(newTask);
-    save(); renderTasks();
-    taskInput.value=''; deadlineInput.value=''; prioritySelect.value='low';
+  // ---------- Save ----------
+  function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
+
+  // ---------- Add Task ----------
+  addBtn.addEventListener("click", () => {
+    const text = taskInput.value.trim();
+    const deadline = deadlineInput.value;
+    const priority = prioritySelect.value;
+
+    if (text === "") return;
+
+    tasks.push({ text, deadline, priority, completed: false });
+    saveTasks();
+    renderTasks();
+
+    taskInput.value = "";
+    deadlineInput.value = "";
+    prioritySelect.value = "low";
   });
 
-  taskInput.addEventListener('keyup', e => { if (e.key==='Enter') addBtn.click(); });
+  // Enter key
+  taskInput.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") addBtn.click();
+  });
 
-  // search
-  searchInput.addEventListener('input', renderTasks);
+  // ---------- Search ----------
+  searchInput.addEventListener("input", renderTasks);
 
-  // filter
-  filterBtns.forEach(b=>{
-    b.addEventListener('click', ()=>{
-      filterBtns.forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      currentFilter = b.dataset.value;
+  // ---------- Filter ----------
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      filterSelect.value = btn.value;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
       renderTasks();
     });
   });
 
-  // dark mode
-  darkModeToggle.addEventListener('click', ()=>{
-    document.body.classList.toggle('dark-mode');
-    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? '1':'0');
-  });
-  if(localStorage.getItem('darkMode')==='1') document.body.classList.add('dark-mode');
-
-  // export
-  exportBtn.addEventListener('click', ()=>{
-    const text = tasks.map(t=>`${t.completed? '[✓]':'[ ]'} ${t.text} ${t.deadline? '- '+t.deadline : ''} (Priority: ${t.priority})`).join('\n');
-    const blob = new Blob([text], {type:'text/plain'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='tasks.txt'; a.click();
-    URL.revokeObjectURL(a.href);
+  // ---------- Dark Mode ----------
+  darkModeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
   });
 
-  // Reminder detection (fake reminder)
-  function tasksDueSoon() {
-    const soon = [];
-    const now = new Date();
-    const tomorrow = new Date(now.getTime() + 24*60*60*1000);
-    tasks.forEach(t=>{
-      if (!t.deadline) return;
-      // parse yyyy-mm-dd
-      const d = new Date(t.deadline + 'T00:00:00');
-      if (d >= now && d <= tomorrow) soon.push(t);
+  // ---------- Export ----------
+  exportBtn.addEventListener("click", () => {
+    let data = tasks.map(t => `${t.completed ? "[✓]" : "[ ]"} ${t.text} (Priority: ${t.priority}, Deadline: ${t.deadline || "-"})`).join("\n");
+    const blob = new Blob([data], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "tasks.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  // ---------- Notifikasi (H-1 Deadline) ----------
+  function checkDeadlines() {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split("T")[0];
+
+    tasks.forEach(task => {
+      if (task.deadline === tomorrowStr && !task.completed) {
+        showNotification(task.text);
+      }
     });
-    return soon;
   }
 
-  function showReminderIfAny() {
-    const soon = tasksDueSoon();
-    if (soon.length === 0) return;
-
-    // build message
-    const names = soon.map(s => s.text + (s.deadline ? ` (due ${s.deadline})` : '')).join('\n• ');
-    reminderText.textContent = `You have ${soon.length} task(s) due within 24 hours:\n• ${names}`;
-
-    // show modal
-    reminderModal.classList.remove('hidden');
-
-    // browser notification if allowed
-    if ('Notification' in window) {
-      if (Notification.permission === 'granted') {
-        new Notification('CLARITY — Task Reminder', { body: `${soon.length} task(s) due soon. Open site to view.` });
-      } else if (Notification.permission !== 'denied') {
-        Notification.requestPermission().then(p => {
-          if (p === 'granted') {
-            new Notification('CLARITY — Task Reminder', { body: `${soon.length} task(s) due soon. Open site to view.` });
-          }
-        });
-      }
+  function showNotification(taskName) {
+    if (Notification.permission === "granted") {
+      new Notification("Hai Clarians 👋🏻", {
+        body: `Tugas "${taskName}" besok deadline yaa, semangat 💪🏻✨️`,
+        icon: "https://cdn-icons-png.flaticon.com/512/3106/3106909.png"
+      });
     }
   }
 
-  // close reminder
-  // the modal has id closeReminder button inside index.html; if not present, fallback to click anywhere to close
-  (function wireClose(){
-    const closeBtn = document.getElementById('closeReminder');
-    if (closeBtn) closeBtn.addEventListener('click', ()=> reminderModal.classList.add('hidden'));
-    // also allow clicking outside
-    reminderModal.addEventListener('click', e=>{
-      if (e.target === reminderModal) reminderModal.classList.add('hidden');
-    });
-  })();
+  // Minta izin notifikasi saat pertama kali
+  if ("Notification" in window && Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
 
-  // initial render + show reminder
+  // Cek deadline setiap 10 detik
+  setInterval(checkDeadlines, 10000);
+
+  // ---------- Initial Render ----------
   renderTasks();
-  // small delay so UI ready
-  setTimeout(showReminderIfAny, 300);
 
 });
